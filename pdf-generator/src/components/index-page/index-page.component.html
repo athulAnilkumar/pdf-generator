@@ -13,7 +13,11 @@
 <img [src]="image" alt="image" width="100px" heigth="100px" />
 } } } @else {
 <label>Upload Your Word File</label>
-<input type="file" (change)="onWordFileChange($event)" accept="document" />
+<input
+  type="file"
+  (change)="onWordFileChange($event)"
+  accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+/>
 }
 
 <button (click)="onGenerateClick()">Generate</button>

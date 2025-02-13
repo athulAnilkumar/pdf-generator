@@ -1,5 +1,9 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { convertImageToBase64, generatePDF } from '../../utils/utils';
+import {
+  convertDocxToPDF,
+  convertImageToBase64,
+  generatePDF,
+} from '../../utils/utils';
 
 @Component({
   selector: 'app-index-page',
@@ -50,6 +54,8 @@ export class IndexPageComponent implements OnInit {
   };
 
   onGenerateClick = () => {
-    generatePDF(this.imageFiles());
+    this.selectedUploadType() === 'imageUpload'
+      ? generatePDF(this.imageFiles())
+      : convertDocxToPDF(this.wordFile());
   };
 }

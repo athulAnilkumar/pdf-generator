@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import mammoth from 'mammoth';
 
 export const generatePDF = async (imageFiles: any) => {
   const pdf = new jsPDF();
@@ -37,4 +38,44 @@ export const convertImageToBase64 = (file: File): Promise<string> => {
 
     reader.readAsDataURL(file);
   });
+};
+
+export const convertDocxToPDF = async (file: any) => {
+  const reader = new FileReader();
+
+  reader.onload = async (event: any) => {
+    const arrayBuffer = event.target.result;
+
+    // Extract text from DOCX
+    const { value: textContent } = await mammoth.extractRawText({
+      arrayBuffer,
+    });
+
+    // Generate PDF
+    const pdf = new jsPDF();
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(12);
+
+    const marginLeft = 10;
+    const marginTop = 10;
+    const maxWidth = 190; // A4 width - margins
+    const lineHeight = 7; // Spacing between lines
+
+    const lines = pdf.splitTextToSize(textContent, maxWidth);
+    let cursorY = marginTop;
+
+    // Add text to PDF
+    lines.forEach((line: any) => {
+      if (cursorY + lineHeight > 280) {
+        pdf.addPage();
+        cursorY = marginTop;
+      }
+      pdf.text(line, marginLeft, cursorY);
+      cursorY += lineHeight;
+    });
+
+    pdf.save('converted-document.pdf');
+  };
+
+  reader.readAsArrayBuffer(file);
 };
