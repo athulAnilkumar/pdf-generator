@@ -1,0 +1,19 @@
+<h1>Generate Your PDF</h1>
+
+<select (change)="onUploadTypeChange($event)">
+  <option value="imageUpload">Upload Images</option>
+  <option value="wordUpload">Upload Word File</option>
+</select>
+
+@if(selectedUploadType() === 'imageUpload'){
+<label>Upload Your Images</label>
+<input type="file" (change)="onImageFileChange($event)" accept="image/*" />
+<button (click)="onResetImageClick()">Reset Uploaded Images</button>
+@if(imageBase64List().length){ @for(image of imageBase64List(); track image){
+<img [src]="image" alt="image" width="100px" heigth="100px" />
+} } } @else {
+<label>Upload Your Word File</label>
+<input type="file" (change)="onWordFileChange($event)" accept="document" />
+}
+
+<button (click)="onGenerateClick()">Generate</button>
